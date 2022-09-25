@@ -72,6 +72,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        # Signals added not by QT-Designer
+        self.legend_config = {}
+        self.displaybutton.clicked.connect(self.pressed_display_button)
+
     def retranslateUi(self, MainWindow):
         """ QTDesigner created function """
         _translate = QtCore.QCoreApplication.translate
@@ -85,22 +89,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def pressed_save_button(self, ):
         """ save legend configuration on pressed button """
         # read config parameters from text input
-        config = {}
-        for field in self.centralwidget.findChildren(QtWidgets.QLineEdit):
-            object_name = str(field.objectName())
-            if "label" in object_name:
-                config[object_name] = field.text()
-            elif "color" in object_name:
-                config[object_name] = field.text()
-
-        print(config)
-
+        self.read_legend_config()
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
             self,"Save Configuration","","json Files (*.json)"
             )
         if filename:
             with open(filename, 'w') as config_file:
-                json.dump(config, config_file, indent=4, sort_keys=True)
+                json.dump(self.legend_config, config_file, indent=4, sort_keys=True)
 
     def pressed_load_button(self, ):
         """ load legend configuration on pressed button """
@@ -110,25 +105,43 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             )
         if filename:
             with open(filename) as config_file:
-                config = json.load(config_file)
+                self.legend_config = json.load(config_file)
 
         # write config in legend display
         for field in self.centralwidget.findChildren(QtWidgets.QLineEdit):
             object_name = str(field.objectName())
-            field.setText(config[object_name])
+            field.setText(self.legend_config[object_name])
 
     def pressed_display_button(self, ):
         """ display legend window on pressed button """
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_DisplayWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
+        if self.legend_config is None:
+            self.read_legend_config()
+            self.open_display_window()
+        else:
+            self.open_display_window()
 
     def pressed_clear_button(self, ):
         """ clear all text in QLineEdits """
         for field in self.centralwidget.findChildren(QtWidgets.QLineEdit):
             field.clear()
         #TODO add clear button
+
+    def open_display_window(self, ):
+        """ """
+        self.window = QtWidgets.QMainWindow()
+        self.display = Ui_DisplayWindow(legend_config=self.legend_config)
+        self.display.setupUi(self.window)
+        self.window.show()
+
+    def read_legend_config(self, ):
+        """ """
+        for field in self.centralwidget.findChildren(QtWidgets.QLineEdit):
+            object_name = str(field.objectName())
+            if "label" in object_name:
+                self.legend_config[object_name] = field.text()
+            elif "color" in object_name:
+                self.legend_config[object_name] = field.text()
+
 
 if __name__ == "__main__":
     import sys
