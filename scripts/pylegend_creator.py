@@ -1,7 +1,12 @@
 import json
+import pathlib
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pylegend_display import Ui_DisplayWindow
 
+#TODO Add close button
+#TODO add loading default parameters/ config/ last config used
+#TODO add setting style properties (darkmode, font, ..)
+#TODO add opening default path to created config folder
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
@@ -73,8 +78,12 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Signals added not by QT-Designer
-        self.legend_config = {}
         self.displaybutton.clicked.connect(self.pressed_display_button)
+
+        self.legend_config = {}
+        self.background_color = "grey"
+        self.background_color_str = "background-color: " + self.background_color + ";"
+        self.setStyleSheet(self.background_color_str)
 
     def retranslateUi(self, MainWindow):
         """ QTDesigner created function """
@@ -88,10 +97,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def pressed_save_button(self, ):
         """ save legend configuration on pressed button """
-        # read config parameters from text input
         self.read_legend_config()
+        config_path = str(pathlib.Path.cwd().parents[0] / "config")
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self,"Save Configuration","","json Files (*.json)"
+            self,"save config to json file", config_path,"json Files (*.json)"
             )
         if filename:
             with open(filename, 'w') as config_file:
@@ -99,9 +108,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def pressed_load_button(self, ):
         """ load legend configuration on pressed button """
-        # args: text displayed, dir opened, which files are displayed
+        config_path = str(pathlib.Path.cwd().parents[0] / "config")
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Load Configuration", "","json Files (*.json)"
+            self, "load config file", config_path,"json Files (*.json)"
             )
         if filename:
             with open(filename) as config_file:
@@ -114,11 +123,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def pressed_display_button(self, ):
         """ display legend window on pressed button """
-        if self.legend_config is None:
-            self.read_legend_config()
-            self.open_display_window()
-        else:
-            self.open_display_window()
+        self.read_legend_config()
+        self.open_display_window()
+        self.set_display_properties()
+
 
     def pressed_clear_button(self, ):
         """ clear all text in QLineEdits """
@@ -126,12 +134,30 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             field.clear()
         #TODO add clear button
 
+    def pressed_config_button(self, ):
+        """ set style parameters for legend display """
+        #TODO add functionality
+        pass
+
     def open_display_window(self, ):
         """ """
         self.window = QtWidgets.QMainWindow()
-        self.display = Ui_DisplayWindow(legend_config=self.legend_config)
+        self.display = Ui_DisplayWindow()
         self.display.setupUi(self.window)
         self.window.show()
+
+    def set_display_properties(self, ):
+        """ """
+        for label in self.display.centralwidget.findChildren(QtWidgets.QLabel):
+            object_name = str(label.objectName())
+            label.setText(self.legend_config[object_name])
+
+        for field in self.display.centralwidget.findChildren(QtWidgets.QLineEdit):
+            # set color of LineEdit field
+            object_name = str(field.objectName())
+            color_str = "background-color: " + str(self.legend_config[object_name])
+            field.setStyleSheet(color_str)
+            field.setEnabled(False)
 
     def read_legend_config(self, ):
         """ """
@@ -141,6 +167,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.legend_config[object_name] = field.text()
             elif "color" in object_name:
                 self.legend_config[object_name] = field.text()
+                if not field.text():
+                    # set color to background color if not further specified
+                    self.legend_config[object_name] = self.background_color
 
 
 if __name__ == "__main__":

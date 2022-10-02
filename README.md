@@ -1,5 +1,10 @@
-# pylegend
-Simple GUI Tool to create a basic legend for graphs and plots
+# PyLegend
+Simple GUI Tool to create a basic, independend legend all kinds of visualizations.
 
+## Setup
 
-**STILL IN DEVELOPMENT AND NOT WORKING YET**
+## Guide
+
+execute "python pylegend_creator.py" from scripts directory and insert label names and desired colorcoding.
+
+## Changelog
