@@ -70,11 +70,11 @@ class Ui_DisplayWindow(QtWidgets.QMainWindow):
         self.label_6.setText(_translate("DisplayWindow", "LegendDisplay"))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    DisplayWindow = QtWidgets.QMainWindow()
-    ui = Ui_DisplayWindow()
-    ui.setupUi(DisplayWindow)
-    DisplayWindow.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     DisplayWindow = QtWidgets.QMainWindow()
+#     ui = Ui_DisplayWindow()
+#     ui.setupUi(DisplayWindow)
+#     DisplayWindow.show()
+#     sys.exit(app.exec_())
