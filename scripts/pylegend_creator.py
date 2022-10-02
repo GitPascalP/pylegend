@@ -3,10 +3,6 @@ import pathlib
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pylegend_display import Ui_DisplayWindow
 
-#TODO Add close button
-#TODO add loading default parameters/ config/ last config used
-#TODO add setting style properties (darkmode, font, ..)
-#TODO add opening default path to created config folder
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
@@ -126,18 +122,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.read_legend_config()
         self.open_display_window()
         self.set_display_properties()
-
-
-    def pressed_clear_button(self, ):
-        """ clear all text in QLineEdits """
-        for field in self.centralwidget.findChildren(QtWidgets.QLineEdit):
-            field.clear()
-        #TODO add clear button
-
-    def pressed_config_button(self, ):
-        """ set style parameters for legend display """
-        #TODO add functionality
-        pass
 
     def open_display_window(self, ):
         """ """
