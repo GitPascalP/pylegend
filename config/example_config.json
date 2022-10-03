@@ -1,14 +1,14 @@
 {
-    "coloredit1": "#F95355",
-    "coloredit2": "#FADE89",
-    "coloredit3": "#B0D894",
-    "coloredit4": "blue",
-    "coloredit5": "grey",
-    "coloredit6": "grey",
-    "labeledit1": "plot1",
-    "labeledit2": "curve2",
-    "labeledit3": "dashplot3",
-    "labeledit4": "plot4",
-    "labeledit5": "",
-    "labeledit6": ""
+    "color1": "#F95355",
+    "color2": "#FADE89",
+    "color3": "rgb(255, 255, 255)",
+    "color4": "blue",
+    "color5": "rgba(255, 255, 255, 0)",
+    "color6": "rgba(255, 255, 255, 0)",
+    "label1": "plot1",
+    "label2": "curve2",
+    "label3": "dashplot3",
+    "label4": "plot4",
+    "label5": "",
+    "label6": ""
 }
